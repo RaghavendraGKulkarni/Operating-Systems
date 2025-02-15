@@ -1,0 +1,9 @@
+Start Time		End Time	Process ID
+0				5			1
+5				11			3
+11				15			0
+15				18			4
+18				19			2
+Average Waiting Time: 7.8000
+Average Response Time: 7.8000
+Average Turn Around Time: 7.6000
