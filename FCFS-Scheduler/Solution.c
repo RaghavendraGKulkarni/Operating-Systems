@@ -49,11 +49,17 @@ Arguments   : A pointer to the heap and the process to be pushed
 Return      : None
 */
 void push(heap *next, process p) {
+
+    // Declare the required local variables
     int index, parent;
     bool heap;
     process v;
+
+    // Push the process to the end of the heap array
     next->heapArray = (process*)realloc(next->heapArray, (next->heapSize + 1)*sizeof(process));
     next->heapArray[next->heapSize++] = p;
+
+    // Heapify the array
     index = next->heapSize - 1;
     v = next->heapArray[index];
     heap = false;
@@ -67,6 +73,8 @@ void push(heap *next, process p) {
         }
     }
     next->heapArray[index] = v;
+
+    // Return
     return;
 }
 
@@ -77,12 +85,18 @@ Arguments   : A pointer to the heap
 Return      : The popped process
 */
 process pop(heap *next) {
+
+    // Declare the required local variables
     int index, child;
     bool heap;
     process p, v;
+
+    // Swap the first and last processes and remove it
     p = next->heapArray[0];
     swap(&next->heapArray[0], &next->heapArray[next->heapSize - 1]);
     next->heapSize--;
+
+    // Heapify the array
     index = 0;
     v = next->heapArray[index];
     heap = false;
@@ -98,16 +112,31 @@ process pop(heap *next) {
         }
     }
     next->heapArray[index] = v;
+
+    // Return
     return p;
 }
+
+/*
+Name        : fcfsScheduler()
+Description : Computes the First Come First Serve schedule for the processes
+Arguments   : An integer denoting the number of processes and an array of processes
+Return      : The schedule
+*/
 schedule fcfsScheduler(int numProcesses, process *processes) {
+
+    // Declare the required local variables
     int time = 0;
     heap next = {0, NULL};
     schedule scheduling = {0, NULL, 0.0, 0.0, 0.0};
     next.heapArray = (process*)malloc(sizeof(process));
     scheduling.executions = (execution*)malloc(sizeof(execution));
+
+    // Push all the processes into the heap
     for(int i = 0; i < numProcesses; i++)
         push(&next, processes[i]);
+    
+    // Pop the processes according to the rule
     while(next.heapSize > 0) {
         process p = pop(&next);
         scheduling.executions = (execution*)realloc(scheduling.executions, (scheduling.scheduleSize + 1)*sizeof(execution));
@@ -120,9 +149,13 @@ schedule fcfsScheduler(int numProcesses, process *processes) {
         time = scheduling.executions[scheduling.scheduleSize].endTime;
         scheduling.scheduleSize++;
     }
+
+    // Compute the averages
     scheduling.averageResponseTime /= numProcesses;
     scheduling.averageTurnAroundTime /= numProcesses;
     scheduling.averageWaitTime /= numProcesses;
+    
+    // Free the heap and return
     free(next.heapArray);
     return scheduling;
 }
