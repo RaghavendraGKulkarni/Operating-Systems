@@ -66,8 +66,13 @@ void push(heap *next, process p) {
     while(!heap && index > 0) {
         parent = (index & 1) ? (index / 2) : ((index - 1) / 2);
         if(next->heapArray[parent].arrivalTime < v.arrivalTime || 
-            (next->heapArray[parent].arrivalTime == v.arrivalTime && next->heapArray[parent].id < v.id))
+            (next->heapArray[parent].arrivalTime == v.arrivalTime && 
+                next->heapArray[parent].burstTime < v.burstTime) ||
+            (next->heapArray[parent].arrivalTime == v.arrivalTime && 
+                next->heapArray[parent].burstTime == v.burstTime &&  
+                next->heapArray[parent].id < v.id)) {
             heap = true;
+        }
         else {
             next->heapArray[index] = next->heapArray[parent];
             index = parent;
@@ -105,10 +110,17 @@ process pop(heap *next) {
         child = 2*index + 1;
         if(child + 1 < next->heapSize && (next->heapArray[child + 1].arrivalTime < next->heapArray[child].arrivalTime || 
             (next->heapArray[child + 1].arrivalTime == next->heapArray[child].arrivalTime && 
+                next->heapArray[child + 1].burstTime < next->heapArray[child].burstTime) ||
+            (next->heapArray[child + 1].arrivalTime == next->heapArray[child].arrivalTime && 
+                next->heapArray[child + 1].burstTime == next->heapArray[child].burstTime &&
                 next->heapArray[child + 1].id < next->heapArray[child].id)))
             child++;
         if(v.arrivalTime < next->heapArray[child].arrivalTime || 
-            (v.arrivalTime == next->heapArray[child].arrivalTime && v.id < next->heapArray[child].id))
+            (v.arrivalTime == next->heapArray[child].arrivalTime && 
+                v.burstTime < next->heapArray[child].burstTime) || 
+            (v.arrivalTime == next->heapArray[child].arrivalTime && 
+                v.burstTime == next->heapArray[child].burstTime &&
+                v.id < next->heapArray[child].id))
             heap = true;
         else {
             next->heapArray[index] = next->heapArray[child];
@@ -122,12 +134,12 @@ process pop(heap *next) {
 }
 
 /*
-Name        : fcfsScheduler()
-Description : Computes the First Come First Serve schedule for the processes
+Name        : sjfScheduler()
+Description : Computes the Shortest Job First schedule for the processes
 Arguments   : An integer denoting the number of processes and an array of processes
 Return      : The schedule
 */
-schedule fcfsScheduler(int numProcesses, process *processes) {
+schedule sjfScheduler(int numProcesses, process *processes) {
 
     // Declare the required local variables
     int time = 0;
@@ -196,7 +208,7 @@ int main() {
     input = NULL;
 
     // Call the subroutine to compute the First Come First Serve schedule
-    schedule scheduling = fcfsScheduler(numProcesses, processes);
+    schedule scheduling = sjfScheduler(numProcesses, processes);
 
     // Open the output file
     FILE *output = fopen("Output.txt", "w");
