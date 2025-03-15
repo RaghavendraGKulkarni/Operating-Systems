@@ -1,6 +1,6 @@
-# First Come First Serve Scheduler
+# Shortest Job First Scheduler
 ## Description:
-### Given a positive integer n and the process id, arrival time and burst time of n processes, the program computes a First Come First Serve schedule of the processes
+### Given a positive integer n and the process id, arrival time and burst time of n processes, the program computes a Shortest Job First schedule of the processes
 ## Input Format:
 * The first line should contain a positive integer n, denoting the number of processes
 * The next n lines should contain three integers each denoting the process id, arrival time and burst time of the processes
