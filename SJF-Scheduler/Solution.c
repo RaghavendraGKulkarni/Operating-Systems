@@ -207,7 +207,7 @@ int main() {
     fclose(input);
     input = NULL;
 
-    // Call the subroutine to compute the First Come First Serve schedule
+    // Call the subroutine to compute the Shortest Job First schedule
     schedule scheduling = sjfScheduler(numProcesses, processes);
 
     // Open the output file
